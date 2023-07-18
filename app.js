@@ -5,10 +5,11 @@ dotenv.config()
 const categorieRouter=require("./routes/categorie.route")
 const articleRouter=require("./routes/article.route ")
 const scategorieRouter=require("./routes/scategorie.route")
-
+const cors =require('cors')
 const app = express();
 //BodyParser Middleware
 app.use(express.json());
+app.use(cors())
 mongoose.set("strictQuery", false);
 // Connexion à la base données
 mongoose.connect(process.env.DATABASECLOUD,{
@@ -26,6 +27,7 @@ res.send("Bienvenue");
 app.use("/api/categories",categorieRouter)
 app.use('/api/scategories', scategorieRouter);
 app.use('/api/articles', articleRouter);
+
 app.listen(process.env.PORT, () => {
 console.log(`Server is listening on port ${process.env.PORT}`); });
 module.exports=app;
