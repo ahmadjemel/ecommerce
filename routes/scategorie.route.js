@@ -26,7 +26,7 @@ res.status(404).json({ message: error.message });
 // chercher une sous catégorie
 router.get('/:scategorieId',async(req, res)=>{
 try {
-16
+
 const scat = await SCategorie.findById(req.params.scategorieId);
 res.status(200).json(scat);
 } catch (error) {
