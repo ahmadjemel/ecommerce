@@ -8,6 +8,7 @@ const scategorieRouter=require("./routes/scategorie.route")
 const paymentRouter = require( "./routes/payment.route.js")
 const cors =require('cors')
 const app = express();
+const userRouter =require("./routes/user.route")
 //BodyParser Middleware
 app.use(express.json());
 app.use(cors())
@@ -33,4 +34,6 @@ app.use('/api/productspage', articleRouter);
 app.use('/api/payment', paymentRouter);
 app.listen(process.env.PORT, () => {
 console.log(`Server is listening on port ${process.env.PORT}`); });
+app.use('/api/users', userRouter);
+
 module.exports=app;
