@@ -5,7 +5,7 @@ const { authorizeRoles } = require('../middleware/authorizeRoles');
 const { verifyToken } = require('../middleware/verify-token');
 
 // créer un nouvelle catégorie
-router.post('/',verifyToken,authorizeRoles("user","admin","visiteur"), async (req, res) => {
+router.post('/',verifyToken,authorizeRoles("user","visiteur"), async (req, res) => {
     const { nomcategorie, imagecategorie} = req.body;
     const newCategorie = new Categorie({nomcategorie:nomcategorie,
     imagecategorie:imagecategorie})
