@@ -5,7 +5,7 @@ const { authorizeRoles } = require('../middleware/authorizeRoles');
 const { verifyToken } = require('../middleware/verify-token');
 
 // créer un nouvelle catégorie
-router.post('/',verifyToken,authorizeRoles("user","visiteur"), async (req, res) => {
+router.post('/',verifyToken,authorizeRoles("admin","visiteur"), async (req, res) => {
     const { nomcategorie, imagecategorie} = req.body;
     const newCategorie = new Categorie({nomcategorie:nomcategorie,
     imagecategorie:imagecategorie})
@@ -17,7 +17,7 @@ router.post('/',verifyToken,authorizeRoles("user","visiteur"), async (req, res) 
         }  });
      
 // afficher la liste des categories.
-router.get('/', async (req, res )=> { 
+router.get('/',verifyToken,authorizeRoles("admin","visiteur"), async (req, res )=> { 
     try {
     const cat = await Categorie.find({}, null, {sort: {'_id': -1}})
     res.status(200).json(cat);
