@@ -10,7 +10,6 @@ var transporter =nodemailer.createTransport({
     auth:{
     user:'ahmad.jemel10@gmail.com',
     pass:'qhzhrdxfeqzxwutw'
-
     },
     tls:{
     rejectUnauthorized:false
@@ -69,7 +68,7 @@ router.get('/', async (req, res, )=> {
     
 /*as an admin i can disable or enable an account
 */
-router.get('/status/edit/', async (req, res) => {
+router.get('/status/edit/', async (req, res) => {//on peut ajouter isadmin
     try {
     let email = req.query.email
     let user = await User.findOne({email})
