@@ -22,7 +22,7 @@ required: true,
 },
 role: {
 type: String,
-enum: ["user", "admin"],
+enum: [ "admin"],
 default: "user"
 },
 isActive: {
@@ -33,7 +33,7 @@ required: false
 avatar :{
 type: String,
 required: false
-} ,
+} 
 },
 {
 timestamps: true,

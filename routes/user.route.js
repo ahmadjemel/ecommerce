@@ -15,7 +15,7 @@ var transporter =nodemailer.createTransport({
     rejectUnauthorized:false
     }
     })
-    
+    require('dotenv').config()  
 // créer un nouvel utilisateur
 router.post('/register', async (req, res) => {//post pour le securite 
         try {
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {//post pour le securite
     const user = await User.findOne({ email })
     if (user) return res.status(404).send({ success: false, message:
     "User already exists" })
-    const newUser = new User({ email, password, firstname, lastname })//nvt utilisateur
+    const newUser = new User({ email, password, firstname, lastname,avatar })//nvt utilisateur
     const createdUser = await newUser.save()//construction user
 // Envoyer l'e-mail de confirmation de l'inscription
 var mailOption ={
@@ -32,9 +32,7 @@ var mailOption ={
     subject: 'vérification your email ',
     html:`<h2>${newUser.firstname}! thank you for registreting on our website</h2>
     <h4>please verify your email to procced.. </h4>
-    <a
-    href="http://${req.headers.host}/api/users/status/edit?email=${newUser.email}">click
-    here</a>`
+    <a href="http://${req.headers.host}/api/users/status/edit?email=${newUser.email}">click here</a>`
     }
     transporter.sendMail(mailOption,function(error,info){
     if(error){
@@ -64,7 +62,45 @@ router.get('/', async (req, res, )=> {
     } catch (error) {
     res.status(404).json({ message: error.message });
     }
+    //Access Token
+const generateAccessToken=(user) =>{
+    return jwt.sign ({ iduser: user._id, role: user.role }, process.env.SECRET, {
+    expiresIn: '60s'})
+    }
+    // Refresh
+    function generateRefreshToken(user) {
+    return jwt.sign ({ iduser: user._id, role: user.role },
+    process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y'})
+    }
+    //Refresh Route
+    router.post('/refreshToken', async (req, res, )=> {
+    console.log(req.body.refreshToken)
+    
+    27
+    const refreshtoken = req.body.refreshToken;
+    if (!refreshtoken) {
+    return res.status(404).send({success: false, message: 'Token Not Found' });
+    }
+    else {
+    jwt.verify(refreshtoken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) { console.log(err)
+    return res.status(406).send({ success: false,message: 'Unauthorized' });
+    }
+    else {
+    const token = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+    console.log("token-------",token);
+    res.status(200).send({success: true,
+    token,
+    refreshToken
+    })
+    }
     });
+    }
+    
+    });
+});
+
     
 /*as an admin i can disable or enable an account
 */
@@ -108,12 +144,13 @@ router.post('/login', async (req, res) => {
     
     false, message: 'Your account is inactive, Please contact your administrator' })
     
-    const token = jwt.sign ({ iduser:
+    // const token = jwt.sign ({ iduser:
     
-    user._id,name:user.firstname, role: user.role }, process.env.SECRET, {
-    expiresIn: "1h", })
-    
-    return res.status(200).send({ success: true, user, token })
+    // user._id,name:user.firstname, role: user.role }, process.env.SECRET, {
+    // expiresIn: "1h", })
+    const token = generateAccessToken(user);
+    const refreshToken= generatRefrechToken(user);
+    return res.status(200).send({ success: true, user, token, refreshToken })
     
     } else {
     
