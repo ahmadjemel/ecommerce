@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Article=require("../models/articles")
+const Article=require("../models/articles");
+const { authorizeRoles } = require('../middleware/authorizeRoles');
+const { verifyToken } = require('../middleware/verify-token');
 
 // chercher un article par s/cat
 router.get('/scat/:scategorieID',async(req, res)=>{
@@ -89,6 +91,17 @@ res.status(200).json({ message: "article deleted successfully." });
 } catch (error) {
 res.status(404).json({ message: error.message });
 }
+// afficher la liste des articles.
+router.get('/',verifyToken,authorizeRoles("user","admin","visiteur"),async (req, res
+    )=> {
+    try {
+    const articles = await Article.find().populate("scategorieID").exec();
+    
+    res.status(200).json(articles);
+    } catch (error) {
+    res.status(404).json({ message: error.message });
+    }
+    });
 });
 
 module.exports = router;

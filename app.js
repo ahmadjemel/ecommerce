@@ -10,6 +10,7 @@ const cors =require('cors')
 const app = express();
 const userRouter =require("./routes/user.route")
 //BodyParser Middleware
+app.use(express.static(__dirname + '/'));
 app.use(express.json());
 app.use(cors())
 mongoose.set("strictQuery", false);
