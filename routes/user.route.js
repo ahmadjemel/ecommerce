@@ -17,14 +17,14 @@ rejectUnauthorized:false
 })
 require('dotenv').config()
 //Register
-router.post('/register', uploadFile.single("avatar"),async (req, res) => {
+router.post('/register',async (req, res) => {
 try {
 let { email, password, firstname, lastname } = req.body
-const avatar=req.file.filename
+
 const user = await User.findOne({ email })
 if (user) return res.status(404).send({ success: false, message: "User already exists" })
 
-const newUser = new User({ email, password, firstname, lastname,avatar })
+const newUser = new User({ email, password, firstname, lastname })
 const createdUser = await newUser.save()
 // Envoyer l'e-mail de confirmation de l'inscription
 var mailOption ={

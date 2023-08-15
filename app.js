@@ -35,6 +35,6 @@ app.use('/api/productspage', articleRouter);
 app.use('/api/payment', paymentRouter);
 app.listen(process.env.PORT, () => {
 console.log(`Server is listening on port ${process.env.PORT}`); });
-app.use('/api/users', userRouter);
+app.use('/api/user', userRouter);
 
 module.exports=app;

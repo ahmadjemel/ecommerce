@@ -22,7 +22,7 @@ required: true,
 },
 role: {
 type: String,
-enum: [ "admin"],
+enum: [ "user","admin"],
 default: "user"
 },
 isActive: {
